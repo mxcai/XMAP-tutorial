@@ -1,5 +1,5 @@
 ---
-title: "About"
+title: "Installation"
 output:
   workflowr::wflow_html:
     toc: false
@@ -7,4 +7,14 @@ editor_options:
   chunk_output_type: console
 ---
 
-Describe your project.
+# Installation
+```{r, eval=F}
+# Install devtools, if necessary
+if (!requireNamespace("devtools", quietly = TRUE))
+    install.packages("devtools")
+# Install XMAP
+devtools::install_github("YangLabHKUST/XMAP")
+# load XMAP
+library(XMAP)
+
+```

@@ -1,0 +1,279 @@
+---
+title: "Vignettes"
+output:
+  workflowr::wflow_html:
+    toc: false
+editor_options:
+  chunk_output_type: console
+---
+
+# Quick start with a simulated example
+We start with a simulated data set for demonstrating the usage of XMAP software. This data set comprises a locus of 500 SNPs, among which 3 are causal.
+```{r}
+library(susieR)
+library(XMAP)
+load("data/example_data.RData")
+par(mfrow = c(1, 2))
+par(mar=c(3,3,2,1))
+susie_plot(zs1, "z", b = Beta_true[, 1], main = "EAS GWAS",ylab="",xlab="")
+title(ylab="-log10(p)",xlab="variant",line=2)
+susie_plot(zs2, "z", b = Beta_true[, 2], main = "EUR GWAS",ylab="",xlab="")
+title(ylab="-log10(p)",xlab="variant",line=2)
+```
+The above manhattan plots show the p-values of GWASs in EAS and EUR with red dots representing the 3 causal SNPs.
+
+This data set is simulated without confounding bias. For demonstration, we apply XMAP by setting $c_1=c_2=1$ here.
+```{r}
+fit_xmap <- XMAP(simplify2array(list(R1,R2)), cbind(zs1,zs2),
+                 c(20000,20000), K = 5,
+                 Omega = OmegaHat,
+                 Sig_E = c(1,1),
+                 tol = 1e-6,
+                 maxIter = 200, estimate_residual_variance = F, estimate_prior_variance = T,
+                 estimate_background_variance = F)
+```
+
+To visualize the results, we plot the PIP and credible sets obtained by XMAP
+```{r}
+# Get credible set based on R1
+cs1 <- get_CS(fit_xmap, Xcorr = R1, coverage = 0.95, min_abs_corr = 0.1)
+# Get credible set based on R2
+cs2 <- get_CS(fit_xmap, Xcorr = R2, coverage = 0.95, min_abs_corr = 0.1)
+# Get joint credible set
+cs <- cs1$cs[intersect(names(cs1$cs), names(cs2$cs))]
+pip <- get_pip(fit_xmap$gamma)
+plot_CS(pip, cs, Beta_true[,1], main = "XMAP")
+```
+In the above figure, the red dot is the only causal SNP, level-95\% credible sets are colored circles. By combining EAS and EUR GWASs, XMAP successfully identifies two true causal signals with high confidence.
+
+# A simulated example with confounding bias
+Here, we provide an example of using XMAP for correcting confounding bias in cross-population GWAS data. We simulated GWAS data with confounding effects. For demonstration, we assume that we have estimated the inflation constants $c_1=1.636171$ and $c_2=1.791455$, and the polygenic parameters $\Omega$ using bi-variate LDSC (See next section for details in estimating these parameters in real GWAS data).
+
+We first fit XMAP without correcting confounding bias by setting $c_1=c_2=1$:
+```{r}
+load("data/example_data_confound.RData")
+c1 <- 1.636171
+c2 <- 1.791455
+fit_xmapI <- XMAP(simplify2array(list(R1,R2)), cbind(zs1,zs2),
+                  c(15000,20000), K = 5,
+                  Omega = OmegaHat,
+                  Sig_E = c(1,1),
+                  tol = 1e-6,
+                  maxIter = 200, estimate_residual_variance = F, estimate_prior_variance = T,
+                  estimate_background_variance = F)
+# Get credible set based on R1
+cs1 <- get_CS(fit_xmapI, Xcorr = R1, coverage = 0.95, min_abs_corr = 0.1)
+# Get credible set based on R2
+cs2 <- get_CS(fit_xmapI, Xcorr = R2, coverage = 0.95, min_abs_corr = 0.1)
+# Get joint credible set
+cs <- cs1$cs[intersect(names(cs1$cs), names(cs2$cs))]
+pip <- get_pip(fit_xmapI$gamma)
+plot_CS(pip, cs, Beta_true[,1], main = "XMAP (C=I)")
+```
+
+In the above figure, the red dot is the only causal SNP, level-95\% credible sets are colored circles. Without correcting for confounding bias, some null SNPs on the left region of the locus can have high PIP. These are false positives.
+
+Now, we use the estimated LDSC intercepts to correct the confounding bias in XMAP:
+```{r}
+c1 <- 1.636171
+c2 <- 1.791455
+fit_xmap <- XMAP(simplify2array(list(R1,R2)), cbind(zs1,zs2),
+                 c(15000,20000), K = 5,
+                 Omega = OmegaHat,
+                 Sig_E = c(c1,c2),
+                 tol = 1e-6,
+                 maxIter = 200, estimate_residual_variance = F, estimate_prior_variance = T,
+                 estimate_background_variance = F)
+# Get credible set based on R1
+cs1 <- get_CS(fit_xmap, Xcorr = R1, coverage = 0.95, min_abs_corr = 0.1)
+# Get credible set based on R2
+cs2 <- get_CS(fit_xmap, Xcorr = R2, coverage = 0.95, min_abs_corr = 0.1)
+# Get joint credible set
+cs <- cs1$cs[intersect(names(cs1$cs), names(cs2$cs))]
+pip <- get_pip(fit_xmap$gamma)
+plot_CS(pip, cs, Beta_true[,1], main = "XMAP")
+```
+As we can observe, XMAP effectively reduces the PIP of spurious signals and correctly excludes them from the level-95\% credible sets.
+
+# A full example with LDL GWASs
+
+In this example, we show the complete pipeline of using XMAP to identify causal SNPs by using real GWAS data. As an example, we use LDL GWASs from AFR and EUR. The files involved are:
+
+1. GWAS summary statistics from different populations
+2. LD scores estimated with samples from the analyzed populations
+3. LD matrices of the target locus estimated with samples from the analyzed populations
+
+The XMAP analysis involves two steps. We first estimate the polygenic parameters and inflation constants using GWAS summary data from the whole genome. Then we fix these parameters and use variational inference to evaluate the posteriror inclusion probability of SNPs in the target locus.
+In this example, we focus on the SNP rs900776 that was previously reported to be related with LDL. This SNP is located at the locus defined by base pair 20000001-23000001 in Chromosome 8. We provide the AFR and EUR LD matrices of this locus estimated from UK Biobank genotypes with the link given in the XMAP GitHub page.
+
+```{r}
+library(XMAP)
+library(susieR)
+library(data.table)
+library(Matrix)
+set.seed(1)
+```
+
+## Step 1: Estimate polygenic parameters and inflation constants
+
+We first apply bi-variate LDCS to estimate the inflation constants and parameters of polygenic effects. We need GWASs Z-scores of the whole genome from AFR and EUR, and their LD scores as input.
+
+We first read GWAS summary statistics and LD scores.
+```{r, eval=F}
+# read GWAS summary statistics
+sumstat_EUR <- fread("/Users/cmx/Documents/Research/Project/Fine_Mapping/sumstats/LDL_allSNPs_UKBNealLab_summary_format.txt")
+sumstat_AFR <- fread("/Users/cmx/Documents/Research/Project/Fine_Mapping/sumstats/LDL_AFR_GLGC_summary_format.txt")
+
+# read LD scores
+ldscore <- data.frame()
+for (chr in 1:22) {
+  ldscore_chr <- fread(paste0("/Users/cmx/Documents/Research/Project/Fine_Mapping/LD_ref/LD_score/LDscore_eas_brit_afr_chr", chr, ".txt"))
+  ldscore <- rbind(ldscore, ldscore_chr)
+  cat("CHR", chr, "\n")
+}
+
+# pre-process: remove ambiguous SNPs
+idx_amb <- which(ldscore$allele1 == comple(ldscore$allele2))
+ldscore <- ldscore[-idx_amb,]
+
+
+# pre-process: overlap SNPs
+snps <- Reduce(intersect, list(ldscore$rsid, sumstat_AFR$SNP, sumstat_EUR$SNP))
+sumstat_AFR_ldsc <- sumstat_AFR[match(snps, sumstat_AFR$SNP),]
+sumstat_EUR_ldsc <- sumstat_EUR[match(snps, sumstat_EUR$SNP),]
+ldscore <- ldscore[match(snps, ldscore$rsid),]
+
+
+# pre-process: flip alleles
+z_afr <- sumstat_AFR_ldsc$beta / sumstat_AFR_ldsc$se
+z_eur <- sumstat_EUR_ldsc$Z
+
+idx_flip <- which(sumstat_AFR_ldsc$A1 != ldscore$allele1 & sumstat_AFR_ldsc$A1 != comple(ldscore$allele1))
+z_afr[idx_flip] <- -z_afr[idx_flip]
+
+idx_flip <- which(sumstat_EUR_ldsc$A1 != ldscore$allele1 & sumstat_EUR_ldsc$A1 != comple(ldscore$allele1))
+z_eur[idx_flip] <- -z_eur[idx_flip]
+
+
+idx1 <- which(z_afr^2 < 30 & z_eur^2 < 30)
+ld_afr_w <- 1 / sapply(ldscore$AFR, function(x) max(x, 1))
+ld_eur_w <- 1 / sapply(ldscore$EUR, function(x) max(x, 1))
+```
+
+
+Then we apply bi-variate LDSC to estimate polygenic and confounding parameters. The two-stage LDSC is used here.
+```{r, eval=F}
+# bi-variate LDSC: AFR-EUR
+# stage 1 of LDSC: estimate intercepts
+fit_step1 <- estimate_gc(data.frame(Z = z_afr[idx1], N = sumstat_AFR_ldsc$N[idx1]), data.frame(Z = z_eur[idx1], N = sumstat_EUR_ldsc$N[idx1]),
+                         ldscore$AFR[idx1], ldscore$EUR[idx1], ldscore$AFR_EUR[idx1],
+                         reg_w1 = ld_afr_w[idx1], reg_w2 = ld_eur_w[idx1], reg_wx = sqrt(ld_afr_w[idx1] * ld_eur_w[idx1]),
+                         constrain_intercept = F)
+# stage 2 of LDSC: fix intercepts and estimate slopes
+fit_step2 <- estimate_gc(data.frame(Z = z_afr, N = sumstat_AFR_ldsc$N), data.frame(Z = z_eur, N = sumstat_EUR_ldsc$N),
+                         ldscore$AFR, ldscore$EUR, ldscore$AFR_EUR,
+                         reg_w1 = ld_afr_w, reg_w2 = ld_eur_w, reg_wx = sqrt(ld_afr_w * ld_eur_w),
+                         constrain_intercept = T, fit_step1$tau1$coefs[1], fit_step1$tau2$coefs[1], fit_step1$theta$coefs[1])
+
+```
+
+
+We now extract the LDSC output and construct $\hat{\Omega}$ and $c_1$, $c_2$ for XMAP analysis
+```{r, eval=F}
+# Assign LDSC estimates to covariance of polygenic effects
+OmegaHat <- diag(c(fit_step2$tau1$coefs[2], fit_step2$tau2$coefs[2])) # AFR EUR
+OmegaHat[1, 2] <- fit_step2$theta$coefs[2] # co-heritability
+OmegaHat[lower.tri(OmegaHat)] <- OmegaHat[upper.tri(OmegaHat)]
+
+c1 <- fit_step2$tau1$coefs[1] # AFR
+c2 <- fit_step2$tau2$coefs[1] # EUR
+```
+
+
+## Step 2: ompute posterior inclusion probability and obtain credible sets
+Given the estimated polygenic parameters and inflation constants, we use variational inference to combine cross-population GWASs and evaluate PIP for SNP in the target locus. We need LD matrices and GWAS Z-scores from AFR and EUR as input.
+
+First, we load the reference LD matrices of EUR and AFR populations estimated from UKBB samples, extract overlapped SNPs, conduct quality control, and align the effect alleles.
+```{r, eval=F}
+# read loci information
+info <- fread("/Users/cmx/Documents/Research/Project/Fine_Mapping/LD_ref/LD_mat/chr8_20000001_23000001.info")
+
+# detect allele ambiguous SNPs
+idx_amb <- which(info$allele1 == comple(info$allele2))
+
+
+# overlap SNPs
+snps <- Reduce(intersect, list(info$rsid[-idx_amb], sumstat_AFR$SNP, sumstat_EUR$SNP))
+sumstat_AFR_i <- sumstat_AFR[match(snps, sumstat_AFR$SNP),]
+sumstat_EUR_i <- sumstat_EUR[match(snps, sumstat_EUR$SNP),]
+
+# read LD matrix of AFR
+R_afr <- readMM("/Users/cmx/Documents/Research/Project/Fine_Mapping/LD_ref/LD_mat/chr8_20000001_23000001_afr.mtx.gz")
+R_afr <- as.matrix(R_afr + t(R_afr))
+idx_afr <- match(snps, info$rsid)
+R_afr <- R_afr[idx_afr, idx_afr]
+
+# read LD matrix of EUR
+R_brit <- readMM("/Users/cmx/Documents/Research/Project/Fine_Mapping/LD_ref/LD_mat/chr8_20000001_23000001_brit.mtx.gz")
+R_brit <- as.matrix(R_brit + t(R_brit))
+idx_brit <- match(snps, info$rsid)
+R_brit <- R_brit[idx_brit, idx_brit]
+
+info <- info[match(snps, info$rsid),]
+
+# remove SNPs with small GWAS sample size
+idx_outlier_EUR <- which(sumstat_EUR_i$N < 0.7 * median(sumstat_EUR_i$N))
+idx_outlier_AFR <- which(sumstat_AFR_i$N < 0.7 * median(sumstat_AFR_i$N))
+
+idx_outlier <- unique(c(idx_outlier_EUR, idx_outlier_AFR))
+
+snps <- snps[-idx_outlier]
+sumstat_AFR_i <- sumstat_AFR_i[-idx_outlier,]
+sumstat_EUR_i <- sumstat_EUR_i[-idx_outlier,]
+info <- info[-idx_outlier,]
+R_afr <- R_afr[-idx_outlier, -idx_outlier]
+R_brit <- R_brit[-idx_outlier, -idx_outlier]
+
+
+# flip alleles
+z_afr <- sumstat_AFR_i$beta / sumstat_AFR_i$se
+z_eur <- sumstat_EUR_i$Z
+
+idx_flip <- which(sumstat_AFR_i$A1 != info$allele1 & sumstat_AFR_i$A1 != comple(info$allele1))
+z_afr[idx_flip] <- -z_afr[idx_flip]
+
+idx_flip <- which(sumstat_EUR_i$A1 != info$allele1 & sumstat_EUR_i$A1 != comple(info$allele1))
+z_eur[idx_flip] <- -z_eur[idx_flip]
+```
+
+
+Then, we run XMAP to obtain the PIP and credible sets
+
+
+```{r, eval=F}
+# Main XMAP analysis
+xmap <- XMAP(simplify2array(list(R_brit, R_afr)), cbind(z_eur, z_afr), c(median(sumstat_EUR_i$N), median(sumstat_AFR_i$N)),
+             K = 10, Omega = OmegaHat, Sig_E = c(c1, c2), tol = 1e-6,
+             maxIter = 200, estimate_residual_variance = F, estimate_prior_variance = T,
+             estimate_background_variance = F)
+```
+
+To visualize the results, we plot the PIP and credible sets obtained by XMAP
+
+```{r, eval=F}
+cs1 <- get_CS(xmap, Xcorr = R_afr, coverage = 0.9, min_abs_corr = 0.1)
+cs2 <- get_CS(xmap, Xcorr = R_brit, coverage = 0.9, min_abs_corr = 0.1)
+cs_xmap <- cs1$cs[intersect(names(cs1$cs), names(cs2$cs))]
+pip_xmap <- get_pip(xmap$gamma)
+```
+
+```{r, echo=F}
+load("data/xmap_LDL_pip_cs.RData")
+```
+
+```{r}
+plot_CS(pip_xmap, cs_xmap, main = "XMAP",b = (info$rsid == "rs900776"))
+```
+The PIP of SNP rs900776 is 0.99 as computed by XMAP.
+
+

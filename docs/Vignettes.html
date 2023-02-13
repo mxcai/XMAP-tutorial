@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Vignettes</title>
+
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">XMAP</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">Installation</a>
+</li>
+<li>
+  <a href="Vignettes.html">Vignettes</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/mxcai/XMAP-tutorial">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Vignettes</h1>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2023-02-13
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>XMAP-tutorial/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown is untracked by Git. To know which version of the R
+Markdown file created these results, you’ll want to first commit it to
+the Git repo. If you’re still working on the analysis, you can ignore
+this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20230213code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20230213)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20230213code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20230213)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommxcaiXMAPtutorialtreea2cf8ce905433e4a5d6200a302f606b9e36aaecdtargetblanka2cf8cea">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/mxcai/XMAP-tutorial/tree/a2cf8ce905433e4a5d6200a302f606b9e36aaecd" target="_blank">a2cf8ce</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcommxcaiXMAPtutorialtreea2cf8ce905433e4a5d6200a302f606b9e36aaecdtargetblanka2cf8cea"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/mxcai/XMAP-tutorial/tree/a2cf8ce905433e4a5d6200a302f606b9e36aaecd" target="_blank">a2cf8ce</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rproj.user/
+    Ignored:    analysis/figure/
+    Ignored:    data/.DS_Store
+
+Untracked files:
+    Untracked:  analysis/Vignettes.Rmd
+    Untracked:  data/LDL_data.RData
+    Untracked:  data/example_data.RData
+    Untracked:  data/example_data_confound.RData
+    Untracked:  data/xmap_LDL_pip_cs.RData
+    Untracked:  data/xmap_susie_out.RData
+
+Unstaged changes:
+    Modified:   analysis/about.Rmd
+    Modified:   analysis/index.Rmd
+    Modified:   analysis/license.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<div id="quick-start-with-a-simulated-example" class="section level1">
+<h1>Quick start with a simulated example</h1>
+<p>We start with a simulated data set for demonstrating the usage of
+XMAP software. This data set comprises a locus of 500 SNPs, among which
+3 are causal.</p>
+<pre class="r"><code>library(susieR)
+library(XMAP)
+load(&quot;data/example_data.RData&quot;)
+par(mfrow = c(1, 2))
+par(mar=c(3,3,2,1))
+susie_plot(zs1, &quot;z&quot;, b = Beta_true[, 1], main = &quot;EAS GWAS&quot;,ylab=&quot;&quot;,xlab=&quot;&quot;)
+title(ylab=&quot;-log10(p)&quot;,xlab=&quot;variant&quot;,line=2)
+susie_plot(zs2, &quot;z&quot;, b = Beta_true[, 2], main = &quot;EUR GWAS&quot;,ylab=&quot;&quot;,xlab=&quot;&quot;)
+title(ylab=&quot;-log10(p)&quot;,xlab=&quot;variant&quot;,line=2)</code></pre>
+<p><img src="figure/Vignettes.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" />
+The above manhattan plots show the p-values of GWASs in EAS and EUR with
+red dots representing the 3 causal SNPs.</p>
+<p>This data set is simulated without confounding bias. For
+demonstration, we apply XMAP by setting <span
+class="math inline">\(c_1=c_2=1\)</span> here.</p>
+<pre class="r"><code>fit_xmap &lt;- XMAP(simplify2array(list(R1,R2)), cbind(zs1,zs2),
+                 c(20000,20000), K = 5,
+                 Omega = OmegaHat,
+                 Sig_E = c(1,1),
+                 tol = 1e-6,
+                 maxIter = 200, estimate_residual_variance = F, estimate_prior_variance = T,
+                 estimate_background_variance = F)</code></pre>
+<p>To visualize the results, we plot the PIP and credible sets obtained
+by XMAP</p>
+<pre class="r"><code># Get credible set based on R1
+cs1 &lt;- get_CS(fit_xmap, Xcorr = R1, coverage = 0.95, min_abs_corr = 0.1)
+# Get credible set based on R2
+cs2 &lt;- get_CS(fit_xmap, Xcorr = R2, coverage = 0.95, min_abs_corr = 0.1)
+# Get joint credible set
+cs &lt;- cs1$cs[intersect(names(cs1$cs), names(cs2$cs))]
+pip &lt;- get_pip(fit_xmap$gamma)
+plot_CS(pip, cs, Beta_true[,1], main = &quot;XMAP&quot;)</code></pre>
+<p><img src="figure/Vignettes.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" />
+In the above figure, the red dot is the only causal SNP, level-95%
+credible sets are colored circles. By combining EAS and EUR GWASs, XMAP
+successfully identifies two true causal signals with high
+confidence.</p>
+</div>
+<div id="a-simulated-example-with-confounding-bias"
+class="section level1">
+<h1>A simulated example with confounding bias</h1>
+<p>Here, we provide an example of using XMAP for correcting confounding
+bias in cross-population GWAS data. We simulated GWAS data with
+confounding effects. For demonstration, we assume that we have estimated
+the inflation constants <span
+class="math inline">\(c_1=1.636171\)</span> and <span
+class="math inline">\(c_2=1.791455\)</span>, and the polygenic
+parameters <span class="math inline">\(\Omega\)</span> using bi-variate
+LDSC (See next section for details in estimating these parameters in
+real GWAS data).</p>
+<p>We first fit XMAP without correcting confounding bias by setting
+<span class="math inline">\(c_1=c_2=1\)</span>:</p>
+<pre class="r"><code>load(&quot;data/example_data_confound.RData&quot;)
+c1 &lt;- 1.636171
+c2 &lt;- 1.791455
+fit_xmapI &lt;- XMAP(simplify2array(list(R1,R2)), cbind(zs1,zs2),
+                  c(15000,20000), K = 5,
+                  Omega = OmegaHat,
+                  Sig_E = c(1,1),
+                  tol = 1e-6,
+                  maxIter = 200, estimate_residual_variance = F, estimate_prior_variance = T,
+                  estimate_background_variance = F)
+# Get credible set based on R1
+cs1 &lt;- get_CS(fit_xmapI, Xcorr = R1, coverage = 0.95, min_abs_corr = 0.1)
+# Get credible set based on R2
+cs2 &lt;- get_CS(fit_xmapI, Xcorr = R2, coverage = 0.95, min_abs_corr = 0.1)
+# Get joint credible set
+cs &lt;- cs1$cs[intersect(names(cs1$cs), names(cs2$cs))]
+pip &lt;- get_pip(fit_xmapI$gamma)
+plot_CS(pip, cs, Beta_true[,1], main = &quot;XMAP (C=I)&quot;)</code></pre>
+<p><img src="figure/Vignettes.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>In the above figure, the red dot is the only causal SNP, level-95%
+credible sets are colored circles. Without correcting for confounding
+bias, some null SNPs on the left region of the locus can have high PIP.
+These are false positives.</p>
+<p>Now, we use the estimated LDSC intercepts to correct the confounding
+bias in XMAP:</p>
+<pre class="r"><code>c1 &lt;- 1.636171
+c2 &lt;- 1.791455
+fit_xmap &lt;- XMAP(simplify2array(list(R1,R2)), cbind(zs1,zs2),
+                 c(15000,20000), K = 5,
+                 Omega = OmegaHat,
+                 Sig_E = c(c1,c2),
+                 tol = 1e-6,
+                 maxIter = 200, estimate_residual_variance = F, estimate_prior_variance = T,
+                 estimate_background_variance = F)
+# Get credible set based on R1
+cs1 &lt;- get_CS(fit_xmap, Xcorr = R1, coverage = 0.95, min_abs_corr = 0.1)
+# Get credible set based on R2
+cs2 &lt;- get_CS(fit_xmap, Xcorr = R2, coverage = 0.95, min_abs_corr = 0.1)
+# Get joint credible set
+cs &lt;- cs1$cs[intersect(names(cs1$cs), names(cs2$cs))]
+pip &lt;- get_pip(fit_xmap$gamma)
+plot_CS(pip, cs, Beta_true[,1], main = &quot;XMAP&quot;)</code></pre>
+<p><img src="figure/Vignettes.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" />
+As we can observe, XMAP effectively reduces the PIP of spurious signals
+and correctly excludes them from the level-95% credible sets.</p>
+</div>
+<div id="a-full-example-with-ldl-gwass" class="section level1">
+<h1>A full example with LDL GWASs</h1>
+<p>In this example, we show the complete pipeline of using XMAP to
+identify causal SNPs by using real GWAS data. As an example, we use LDL
+GWASs from AFR and EUR. The files involved are:</p>
+<ol style="list-style-type: decimal">
+<li>GWAS summary statistics from different populations</li>
+<li>LD scores estimated with samples from the analyzed populations</li>
+<li>LD matrices of the target locus estimated with samples from the
+analyzed populations</li>
+</ol>
+<p>The XMAP analysis involves two steps. We first estimate the polygenic
+parameters and inflation constants using GWAS summary data from the
+whole genome. Then we fix these parameters and use variational inference
+to evaluate the posteriror inclusion probability of SNPs in the target
+locus. In this example, we focus on the SNP rs900776 that was previously
+reported to be related with LDL. This SNP is located at the locus
+defined by base pair 20000001-23000001 in Chromosome 8. We provide the
+AFR and EUR LD matrices of this locus estimated from UK Biobank
+genotypes with the link given in the XMAP GitHub page.</p>
+<pre class="r"><code>library(XMAP)
+library(susieR)
+library(data.table)
+library(Matrix)
+set.seed(1)</code></pre>
+<div id="step-1-estimate-polygenic-parameters-and-inflation-constants"
+class="section level2">
+<h2>Step 1: Estimate polygenic parameters and inflation constants</h2>
+<p>We first apply bi-variate LDCS to estimate the inflation constants
+and parameters of polygenic effects. We need GWASs Z-scores of the whole
+genome from AFR and EUR, and their LD scores as input.</p>
+<p>We first read GWAS summary statistics and LD scores.</p>
+<pre class="r"><code># read GWAS summary statistics
+sumstat_EUR &lt;- fread(&quot;/Users/cmx/Documents/Research/Project/Fine_Mapping/sumstats/LDL_allSNPs_UKBNealLab_summary_format.txt&quot;)
+sumstat_AFR &lt;- fread(&quot;/Users/cmx/Documents/Research/Project/Fine_Mapping/sumstats/LDL_AFR_GLGC_summary_format.txt&quot;)
+
+# read LD scores
+ldscore &lt;- data.frame()
+for (chr in 1:22) {
+  ldscore_chr &lt;- fread(paste0(&quot;/Users/cmx/Documents/Research/Project/Fine_Mapping/LD_ref/LD_score/LDscore_eas_brit_afr_chr&quot;, chr, &quot;.txt&quot;))
+  ldscore &lt;- rbind(ldscore, ldscore_chr)
+  cat(&quot;CHR&quot;, chr, &quot;\n&quot;)
+}
+
+# pre-process: remove ambiguous SNPs
+idx_amb &lt;- which(ldscore$allele1 == comple(ldscore$allele2))
+ldscore &lt;- ldscore[-idx_amb,]
+
+
+# pre-process: overlap SNPs
+snps &lt;- Reduce(intersect, list(ldscore$rsid, sumstat_AFR$SNP, sumstat_EUR$SNP))
+sumstat_AFR_ldsc &lt;- sumstat_AFR[match(snps, sumstat_AFR$SNP),]
+sumstat_EUR_ldsc &lt;- sumstat_EUR[match(snps, sumstat_EUR$SNP),]
+ldscore &lt;- ldscore[match(snps, ldscore$rsid),]
+
+
+# pre-process: flip alleles
+z_afr &lt;- sumstat_AFR_ldsc$beta / sumstat_AFR_ldsc$se
+z_eur &lt;- sumstat_EUR_ldsc$Z
+
+idx_flip &lt;- which(sumstat_AFR_ldsc$A1 != ldscore$allele1 &amp; sumstat_AFR_ldsc$A1 != comple(ldscore$allele1))
+z_afr[idx_flip] &lt;- -z_afr[idx_flip]
+
+idx_flip &lt;- which(sumstat_EUR_ldsc$A1 != ldscore$allele1 &amp; sumstat_EUR_ldsc$A1 != comple(ldscore$allele1))
+z_eur[idx_flip] &lt;- -z_eur[idx_flip]
+
+
+idx1 &lt;- which(z_afr^2 &lt; 30 &amp; z_eur^2 &lt; 30)
+ld_afr_w &lt;- 1 / sapply(ldscore$AFR, function(x) max(x, 1))
+ld_eur_w &lt;- 1 / sapply(ldscore$EUR, function(x) max(x, 1))</code></pre>
+<p>Then we apply bi-variate LDSC to estimate polygenic and confounding
+parameters. The two-stage LDSC is used here.</p>
+<pre class="r"><code># bi-variate LDSC: AFR-EUR
+# stage 1 of LDSC: estimate intercepts
+fit_step1 &lt;- estimate_gc(data.frame(Z = z_afr[idx1], N = sumstat_AFR_ldsc$N[idx1]), data.frame(Z = z_eur[idx1], N = sumstat_EUR_ldsc$N[idx1]),
+                         ldscore$AFR[idx1], ldscore$EUR[idx1], ldscore$AFR_EUR[idx1],
+                         reg_w1 = ld_afr_w[idx1], reg_w2 = ld_eur_w[idx1], reg_wx = sqrt(ld_afr_w[idx1] * ld_eur_w[idx1]),
+                         constrain_intercept = F)
+# stage 2 of LDSC: fix intercepts and estimate slopes
+fit_step2 &lt;- estimate_gc(data.frame(Z = z_afr, N = sumstat_AFR_ldsc$N), data.frame(Z = z_eur, N = sumstat_EUR_ldsc$N),
+                         ldscore$AFR, ldscore$EUR, ldscore$AFR_EUR,
+                         reg_w1 = ld_afr_w, reg_w2 = ld_eur_w, reg_wx = sqrt(ld_afr_w * ld_eur_w),
+                         constrain_intercept = T, fit_step1$tau1$coefs[1], fit_step1$tau2$coefs[1], fit_step1$theta$coefs[1])</code></pre>
+<p>We now extract the LDSC output and construct <span
+class="math inline">\(\hat{\Omega}\)</span> and <span
+class="math inline">\(c_1\)</span>, <span
+class="math inline">\(c_2\)</span> for XMAP analysis</p>
+<pre class="r"><code># Assign LDSC estimates to covariance of polygenic effects
+OmegaHat &lt;- diag(c(fit_step2$tau1$coefs[2], fit_step2$tau2$coefs[2])) # AFR EUR
+OmegaHat[1, 2] &lt;- fit_step2$theta$coefs[2] # co-heritability
+OmegaHat[lower.tri(OmegaHat)] &lt;- OmegaHat[upper.tri(OmegaHat)]
+
+c1 &lt;- fit_step2$tau1$coefs[1] # AFR
+c2 &lt;- fit_step2$tau2$coefs[1] # EUR</code></pre>
+</div>
+<div
+id="step-2-ompute-posterior-inclusion-probability-and-obtain-credible-sets"
+class="section level2">
+<h2>Step 2: ompute posterior inclusion probability and obtain credible
+sets</h2>
+<p>Given the estimated polygenic parameters and inflation constants, we
+use variational inference to combine cross-population GWASs and evaluate
+PIP for SNP in the target locus. We need LD matrices and GWAS Z-scores
+from AFR and EUR as input.</p>
+<p>First, we load the reference LD matrices of EUR and AFR populations
+estimated from UKBB samples, extract overlapped SNPs, conduct quality
+control, and align the effect alleles.</p>
+<pre class="r"><code># read loci information
+info &lt;- fread(&quot;/Users/cmx/Documents/Research/Project/Fine_Mapping/LD_ref/LD_mat/chr8_20000001_23000001.info&quot;)
+
+# detect allele ambiguous SNPs
+idx_amb &lt;- which(info$allele1 == comple(info$allele2))
+
+
+# overlap SNPs
+snps &lt;- Reduce(intersect, list(info$rsid[-idx_amb], sumstat_AFR$SNP, sumstat_EUR$SNP))
+sumstat_AFR_i &lt;- sumstat_AFR[match(snps, sumstat_AFR$SNP),]
+sumstat_EUR_i &lt;- sumstat_EUR[match(snps, sumstat_EUR$SNP),]
+
+# read LD matrix of AFR
+R_afr &lt;- readMM(&quot;/Users/cmx/Documents/Research/Project/Fine_Mapping/LD_ref/LD_mat/chr8_20000001_23000001_afr.mtx.gz&quot;)
+R_afr &lt;- as.matrix(R_afr + t(R_afr))
+idx_afr &lt;- match(snps, info$rsid)
+R_afr &lt;- R_afr[idx_afr, idx_afr]
+
+# read LD matrix of EUR
+R_brit &lt;- readMM(&quot;/Users/cmx/Documents/Research/Project/Fine_Mapping/LD_ref/LD_mat/chr8_20000001_23000001_brit.mtx.gz&quot;)
+R_brit &lt;- as.matrix(R_brit + t(R_brit))
+idx_brit &lt;- match(snps, info$rsid)
+R_brit &lt;- R_brit[idx_brit, idx_brit]
+
+info &lt;- info[match(snps, info$rsid),]
+
+# remove SNPs with small GWAS sample size
+idx_outlier_EUR &lt;- which(sumstat_EUR_i$N &lt; 0.7 * median(sumstat_EUR_i$N))
+idx_outlier_AFR &lt;- which(sumstat_AFR_i$N &lt; 0.7 * median(sumstat_AFR_i$N))
+
+idx_outlier &lt;- unique(c(idx_outlier_EUR, idx_outlier_AFR))
+
+snps &lt;- snps[-idx_outlier]
+sumstat_AFR_i &lt;- sumstat_AFR_i[-idx_outlier,]
+sumstat_EUR_i &lt;- sumstat_EUR_i[-idx_outlier,]
+info &lt;- info[-idx_outlier,]
+R_afr &lt;- R_afr[-idx_outlier, -idx_outlier]
+R_brit &lt;- R_brit[-idx_outlier, -idx_outlier]
+
+
+# flip alleles
+z_afr &lt;- sumstat_AFR_i$beta / sumstat_AFR_i$se
+z_eur &lt;- sumstat_EUR_i$Z
+
+idx_flip &lt;- which(sumstat_AFR_i$A1 != info$allele1 &amp; sumstat_AFR_i$A1 != comple(info$allele1))
+z_afr[idx_flip] &lt;- -z_afr[idx_flip]
+
+idx_flip &lt;- which(sumstat_EUR_i$A1 != info$allele1 &amp; sumstat_EUR_i$A1 != comple(info$allele1))
+z_eur[idx_flip] &lt;- -z_eur[idx_flip]</code></pre>
+<p>Then, we run XMAP to obtain the PIP and credible sets</p>
+<pre class="r"><code># Main XMAP analysis
+xmap &lt;- XMAP(simplify2array(list(R_brit, R_afr)), cbind(z_eur, z_afr), c(median(sumstat_EUR_i$N), median(sumstat_AFR_i$N)),
+             K = 10, Omega = OmegaHat, Sig_E = c(c1, c2), tol = 1e-6,
+             maxIter = 200, estimate_residual_variance = F, estimate_prior_variance = T,
+             estimate_background_variance = F)</code></pre>
+<p>To visualize the results, we plot the PIP and credible sets obtained
+by XMAP</p>
+<pre class="r"><code>cs1 &lt;- get_CS(xmap, Xcorr = R_afr, coverage = 0.9, min_abs_corr = 0.1)
+cs2 &lt;- get_CS(xmap, Xcorr = R_brit, coverage = 0.9, min_abs_corr = 0.1)
+cs_xmap &lt;- cs1$cs[intersect(names(cs1$cs), names(cs2$cs))]
+pip_xmap &lt;- get_pip(xmap$gamma)</code></pre>
+<pre class="r"><code>plot_CS(pip_xmap, cs_xmap, main = &quot;XMAP&quot;,b = (info$rsid == &quot;rs900776&quot;))</code></pre>
+<p><img src="figure/Vignettes.Rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" />
+The PIP of SNP rs900776 is 0.99 as computed by XMAP.</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.2 (2021-11-01)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS 13.0
+
+Matrix products: default
+BLAS:   /opt/homebrew/Cellar/openblas/0.3.19/lib/libopenblasp-r0.3.19.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.1-arm64/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] Matrix_1.3-4      data.table_1.14.2 XMAP_1.0          susieR_0.11.92   
+
+loaded via a namespace (and not attached):
+ [1] tidyselect_1.1.1   xfun_0.32          bslib_0.4.0        purrr_0.3.4       
+ [5] lattice_0.20-45    colorspace_2.0-2   vctrs_0.4.1        generics_0.1.1    
+ [9] htmltools_0.5.3    yaml_2.3.5         utf8_1.2.2         rlang_1.0.4       
+[13] mixsqp_0.3-43      jquerylib_0.1.4    later_1.3.0        pillar_1.6.4      
+[17] glue_1.6.2         DBI_1.1.1          RcppZiggurat_0.1.6 plyr_1.8.6        
+[21] matrixStats_0.61.0 lifecycle_1.0.1    stringr_1.4.1      munsell_0.5.0     
+[25] gtable_0.3.0       workflowr_1.7.0    evaluate_0.16      knitr_1.40        
+[29] fastmap_1.1.0      httpuv_1.6.5       parallel_4.1.2     irlba_2.3.5       
+[33] fansi_0.5.0        Rfast_2.0.6        highr_0.9          Rcpp_1.0.10       
+[37] promises_1.2.0.1   scales_1.1.1       cachem_1.0.6       jsonlite_1.8.0    
+[41] fs_1.5.2           ggplot2_3.3.5      digest_0.6.29      stringi_1.7.8     
+[45] dplyr_1.0.7        rprojroot_2.0.2    grid_4.1.2         cli_3.3.0         
+[49] tools_4.1.2        magrittr_2.0.3     sass_0.4.2         tibble_3.1.6      
+[53] crayon_1.5.1       pkgconfig_2.0.3    ellipsis_0.3.2     reshape_0.8.8     
+[57] assertthat_0.2.1   rmarkdown_2.16     rstudioapi_0.13    R6_2.5.1          
+[61] git2r_0.31.0       compiler_4.1.2    </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
