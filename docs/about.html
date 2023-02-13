@@ -32,6 +32,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -273,7 +275,13 @@ $(document).ready(function () {
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/YangLabHKUST/XMAP">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -291,7 +299,7 @@ $(document).ready(function () {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -302,8 +310,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -316,9 +324,9 @@ aria-hidden="true"></span> </a>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>XMAP-tutorial/</code> <span
@@ -341,21 +349,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -446,13 +451,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongc276160">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommxcaiXMAPtutorialtree59dc5b8f579da080e9fb7f49a426ffaadfac2625targetblank59dc5b8a">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> c276160
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/mxcai/XMAP-tutorial/tree/59dc5b8f579da080e9fb7f49a426ffaadfac2625" target="_blank">59dc5b8</a>
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongc276160"
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcommxcaiXMAPtutorialtree59dc5b8f579da080e9fb7f49a426ffaadfac2625targetblank59dc5b8a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -461,7 +468,8 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version c276160.
+The results in this page were generated with repository version
+<a href="https://github.com/mxcai/XMAP-tutorial/tree/59dc5b8f579da080e9fb7f49a426ffaadfac2625" target="_blank">59dc5b8</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -480,18 +488,8 @@ Ignored files:
     Ignored:    .Rproj.user/
     Ignored:    data/.DS_Store
 
-Untracked files:
-    Untracked:  analysis/Vignettes.Rmd
-    Untracked:  data/LDL_data.RData
-    Untracked:  data/example_data.RData
-    Untracked:  data/example_data_confound.RData
-    Untracked:  data/xmap_susie_out.RData
-
 Unstaged changes:
     Modified:   analysis/_site.yml
-    Modified:   analysis/about.Rmd
-    Modified:   analysis/index.Rmd
-    Modified:   analysis/license.Rmd
 
 </code></pre>
 <p>
@@ -541,7 +539,41 @@ Message
 Rmd
 </td>
 <td>
-c276160
+<a href="https://github.com/mxcai/XMAP-tutorial/blob/81bc3f6255e4bc545bc3004fc5aba2c77fe3791f/analysis/about.Rmd" target="_blank">81bc3f6</a>
+</td>
+<td>
+mxcai
+</td>
+<td>
+2023-02-13
+</td>
+<td>
+add
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/mxcai/XMAP-tutorial/81bc3f6255e4bc545bc3004fc5aba2c77fe3791f/docs/about.html" target="_blank">81bc3f6</a>
+</td>
+<td>
+mxcai
+</td>
+<td>
+2023-02-13
+</td>
+<td>
+add
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/mxcai/XMAP-tutorial/blob/c276160faaa7190d819c5e4d35c21d74837e4cf9/analysis/about.Rmd" target="_blank">c276160</a>
 </td>
 <td>
 mxcai

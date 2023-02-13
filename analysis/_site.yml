@@ -14,7 +14,7 @@ navbar:
   right:
   - icon: fab fa-github
     text: Source code
-    href: https://github.com/mxcai/XMAP-tutorial
+    href: https://github.com/YangLabHKUST/XMAP
 output:
   workflowr::wflow_html:
     toc: yes
