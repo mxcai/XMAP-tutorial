@@ -1,14 +1,20 @@
-name: "XMAP-tutorial"
+name: XMAP
 output_dir: ../docs
 navbar:
-  title: "XMAP-tutorial"
+  title: XMAP
   left:
   - text: Home
     href: index.html
-  - text: About
+  - text: Installation
     href: about.html
+  - text: Vignettes
+    href: Vignettes.html
   - text: License
     href: license.html
+  right:
+  - icon: fab fa-github
+    text: Source code
+    href: https://github.com/mxcai/XMAP-tutorial
 output:
   workflowr::wflow_html:
     toc: yes
