@@ -12,7 +12,7 @@ We start with a simulated data set for demonstrating the usage of XMAP software.
 ```{r}
 library(susieR)
 library(XMAP)
-load("data/example_data.RData")
+data("example_data")
 par(mfrow = c(1, 2))
 par(mar=c(3,3,2,1))
 susie_plot(zs1, "z", b = Beta_true[, 1], main = "EAS GWAS",ylab="",xlab="")
@@ -51,7 +51,7 @@ Here, we provide an example of using XMAP for correcting confounding bias in cro
 
 We first fit XMAP without correcting confounding bias by setting $c_1=c_2=1$:
 ```{r}
-load("data/example_data_confound.RData")
+data("example_data_confound")
 c1 <- 1.636171
 c2 <- 1.791455
 fit_xmapI <- XMAP(simplify2array(list(R1,R2)), cbind(zs1,zs2),
