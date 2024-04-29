@@ -1,0 +1,47 @@
+---
+title: "Quick Start"
+output:
+  workflowr::wflow_html:
+    toc: false
+editor_options:
+  chunk_output_type: console
+---
+
+# Quick start with a simulated example
+We start with a simulated data set for demonstrating the usage of XMAP software. This data set comprises a locus of 500 SNPs, among which 3 are causal.
+```{r}
+library(susieR)
+library(XMAP)
+data("example_data")
+par(mfrow = c(1, 2))
+par(mar=c(3,3,2,1))
+susie_plot(zs1, "z", b = Beta_true[, 1], main = "EAS GWAS",ylab="",xlab="")
+title(ylab="-log10(p)",xlab="variant",line=2)
+susie_plot(zs2, "z", b = Beta_true[, 2], main = "EUR GWAS",ylab="",xlab="")
+title(ylab="-log10(p)",xlab="variant",line=2)
+```
+The above manhattan plots show the p-values of GWASs in EAS and EUR with red dots representing the 3 causal SNPs.
+
+This data set is simulated without confounding bias. For demonstration, we apply XMAP by setting $c_1=c_2=1$ here.
+```{r}
+fit_xmap <- XMAP(simplify2array(list(R1,R2)), cbind(zs1,zs2),
+                 n=c(20000,20000), K = 5,
+                 Omega = OmegaHat,
+                 Sig_E = c(1,1),
+                 tol = 1e-6,
+                 maxIter = 200, estimate_residual_variance = F, estimate_prior_variance = T,
+                 estimate_background_variance = F)
+```
+
+To visualize the results, we plot the PIP and credible sets obtained by XMAP
+```{r}
+# Get credible set based on R1
+cs1 <- get_CS(fit_xmap, Xcorr = R1, coverage = 0.95, min_abs_corr = 0.1)
+# Get credible set based on R2
+cs2 <- get_CS(fit_xmap, Xcorr = R2, coverage = 0.95, min_abs_corr = 0.1)
+# Get joint credible set
+cs <- cs1$cs[intersect(names(cs1$cs), names(cs2$cs))]
+pip <- get_pip(fit_xmap$gamma)
+plot_CS(pip, cs, Beta_true[,1], main = "XMAP")
+```
+In the above figure, the red dot is the only causal SNP, level-95\% credible sets are colored circles. By combining EAS and EUR GWASs, XMAP successfully identifies two true causal signals with high confidence.

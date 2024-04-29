@@ -25,7 +25,7 @@ The above manhattan plots show the p-values of GWASs in EAS and EUR with red dot
 This data set is simulated without confounding bias. For demonstration, we apply XMAP by setting $c_1=c_2=1$ here.
 ```{r}
 fit_xmap <- XMAP(simplify2array(list(R1,R2)), cbind(zs1,zs2),
-                 c(20000,20000), K = 5,
+                 n=c(20000,20000), K = 5,
                  Omega = OmegaHat,
                  Sig_E = c(1,1),
                  tol = 1e-6,
@@ -55,7 +55,7 @@ data("example_data_confound")
 c1 <- 1.636171
 c2 <- 1.791455
 fit_xmapI <- XMAP(simplify2array(list(R1,R2)), cbind(zs1,zs2),
-                  c(15000,20000), K = 5,
+                  n=c(15000,20000), K = 5,
                   Omega = OmegaHat,
                   Sig_E = c(1,1),
                   tol = 1e-6,
@@ -78,7 +78,7 @@ Now, we use the estimated LDSC intercepts to correct the confounding bias in XMA
 c1 <- 1.636171
 c2 <- 1.791455
 fit_xmap <- XMAP(simplify2array(list(R1,R2)), cbind(zs1,zs2),
-                 c(15000,20000), K = 5,
+                 n=c(15000,20000), K = 5,
                  Omega = OmegaHat,
                  Sig_E = c(c1,c2),
                  tol = 1e-6,
@@ -252,7 +252,7 @@ Then, we run XMAP to obtain the PIP and credible sets
 
 ```{r, eval=F}
 # Main XMAP analysis
-xmap <- XMAP(simplify2array(list(R_brit, R_afr)), cbind(z_eur, z_afr), c(median(sumstat_EUR_i$N), median(sumstat_AFR_i$N)),
+xmap <- XMAP(simplify2array(list(R_brit, R_afr)), cbind(z_eur, z_afr), n=c(median(sumstat_EUR_i$N), median(sumstat_AFR_i$N)),
              K = 10, Omega = OmegaHat, Sig_E = c(c1, c2), tol = 1e-6,
              maxIter = 200, estimate_residual_variance = F, estimate_prior_variance = T,
              estimate_background_variance = F)

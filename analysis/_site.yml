@@ -7,10 +7,12 @@ navbar:
     href: index.html
   - text: Installation
     href: about.html
-  - text: Vignettes
-    href: Vignettes.html
-  - text: License
-    href: license.html
+  - text: Tutorial
+    menu:
+    -text: Vignettes
+     href: Vignettes.html
+    -text: Quick Start
+     href: quick_start.html
   right:
   - icon: fab fa-github
     text: Source code
