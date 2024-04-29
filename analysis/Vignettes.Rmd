@@ -190,7 +190,7 @@ c2 <- fit_step2$tau2$coefs[1] # EUR
 ```
 
 
-## Step 2: ompute posterior inclusion probability and obtain credible sets
+## Step 2: Compute posterior inclusion probability and obtain credible sets
 Given the estimated polygenic parameters and inflation constants, we use variational inference to combine cross-population GWASs and evaluate PIP for SNP in the target locus. We need LD matrices and GWAS Z-scores from AFR and EUR as input.
 
 First, we load the reference LD matrices of EUR and AFR populations estimated from UKBB samples, extract overlapped SNPs, conduct quality control, and align the effect alleles.
