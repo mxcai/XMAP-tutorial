@@ -9,10 +9,12 @@ navbar:
     href: about.html
   - text: Tutorial
     menu:
-    - text: Vignettes
-      href: Vignettes.html
     - text: Quick Start
       href: quick_start.html
+    - text: Simulated example with confounding effects
+      href: confounding.html
+    - text: Real data example with LDL GWAS
+      href: LDL.html
   - text: License
     href: license.html
   right:

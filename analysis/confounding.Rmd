@@ -1,0 +1,58 @@
+---
+title: "A simulated example with confounding bias"
+output:
+  workflowr::wflow_html:
+    toc: false
+editor_options:
+  chunk_output_type: console
+---
+
+Here, we provide an example of using XMAP for correcting confounding bias in cross-population GWAS data. We simulated GWAS data with confounding effects. For demonstration, we assume that we have estimated the inflation constants $c_1=1.636171$ and $c_2=1.791455$, and the polygenic parameters $\Omega$ using bi-variate LDSC (See next section for details in estimating these parameters in real GWAS data).
+
+We first fit XMAP without correcting confounding bias by setting $c_1=c_2=1$:
+```{r}
+library(susieR)
+library(XMAP)
+data("example_data_confound")
+c1 <- 1.636171
+c2 <- 1.791455
+fit_xmapI <- XMAP(simplify2array(list(R1,R2)), cbind(zs1,zs2),
+                  n=c(15000,20000), K = 5,
+                  Omega = OmegaHat,
+                  Sig_E = c(1,1),
+                  tol = 1e-6,
+                  maxIter = 200, estimate_residual_variance = F, estimate_prior_variance = T,
+                  estimate_background_variance = F)
+# Get credible set based on R1
+cs1 <- get_CS(fit_xmapI, Xcorr = R1, coverage = 0.95, min_abs_corr = 0.1)
+# Get credible set based on R2
+cs2 <- get_CS(fit_xmapI, Xcorr = R2, coverage = 0.95, min_abs_corr = 0.1)
+# Get joint credible set
+cs <- cs1$cs[intersect(names(cs1$cs), names(cs2$cs))]
+pip <- get_pip(fit_xmapI$gamma)
+plot_CS(pip, cs, Beta_true[,1], main = "XMAP (C=I)")
+```
+
+In the above figure, the red dot is the only causal SNP, level-95\% credible sets are colored circles. Without correcting for confounding bias, some null SNPs on the left region of the locus can have high PIP. These are false positives.
+
+Now, we use the estimated LDSC intercepts to correct the confounding bias in XMAP:
+```{r}
+c1 <- 1.636171
+c2 <- 1.791455
+fit_xmap <- XMAP(simplify2array(list(R1,R2)), cbind(zs1,zs2),
+                 n=c(15000,20000), K = 5,
+                 Omega = OmegaHat,
+                 Sig_E = c(c1,c2),
+                 tol = 1e-6,
+                 maxIter = 200, estimate_residual_variance = F, estimate_prior_variance = T,
+                 estimate_background_variance = F)
+# Get credible set based on R1
+cs1 <- get_CS(fit_xmap, Xcorr = R1, coverage = 0.95, min_abs_corr = 0.1)
+# Get credible set based on R2
+cs2 <- get_CS(fit_xmap, Xcorr = R2, coverage = 0.95, min_abs_corr = 0.1)
+# Get joint credible set
+cs <- cs1$cs[intersect(names(cs1$cs), names(cs2$cs))]
+pip <- get_pip(fit_xmap$gamma)
+plot_CS(pip, cs, Beta_true[,1], main = "XMAP")
+```
+As we can observe, XMAP effectively reduces the PIP of spurious signals and correctly excludes them from the level-95\% credible sets.

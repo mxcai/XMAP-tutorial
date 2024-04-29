@@ -1,5 +1,5 @@
 ---
-title: "Quick Start"
+title: "Quick Start: A simulated example without confounding bias"
 output:
   workflowr::wflow_html:
     toc: false
@@ -7,7 +7,6 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Quick start with a simulated example
 We start with a simulated data set for demonstrating the usage of XMAP software. This data set comprises a locus of 500 SNPs, among which 3 are causal.
 ```{r}
 library(susieR)

@@ -11,7 +11,7 @@
 
 
 
-<title>Quick Start</title>
+<title>Quick Start: A simulated example without confounding bias</title>
 
 <script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -267,8 +267,23 @@ $(document).ready(function () {
 <li>
   <a href="about.html">Installation</a>
 </li>
-<li>
-  <a href="Vignettes.html">Vignettes</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Tutorial
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="quick_start.html">Quick Start</a>
+    </li>
+    <li>
+      <a href="confounding.html">Simulated example with confounding effects</a>
+    </li>
+    <li>
+      <a href="LDL.html">Real data example with LDL GWAS</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="license.html">License</a>
@@ -291,7 +306,8 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Quick Start</h1>
+<h1 class="title toc-ignore">Quick Start: A simulated example without
+confounding bias</h1>
 
 </div>
 
@@ -358,10 +374,10 @@ changes </a>
 <div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R
-Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
 <code>wflow_publish</code> to commit the R Markdown file and build the
 HTML.</p>
 </div>
@@ -454,15 +470,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommxcaiXMAPtutorialtreef7c4f659a9b7d68a245eccc8ff72e656341263b9targetblankf7c4f65a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommxcaiXMAPtutorialtree0174f6d312f46004f9aab02b786af0a5a1163945targetblank0174f6da">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/mxcai/XMAP-tutorial/tree/f7c4f659a9b7d68a245eccc8ff72e656341263b9" target="_blank">f7c4f65</a>
+<a href="https://github.com/mxcai/XMAP-tutorial/tree/0174f6d312f46004f9aab02b786af0a5a1163945" target="_blank">0174f6d</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcommxcaiXMAPtutorialtreef7c4f659a9b7d68a245eccc8ff72e656341263b9targetblankf7c4f65a"
+id="strongRepositoryversionstrongahrefhttpsgithubcommxcaiXMAPtutorialtree0174f6d312f46004f9aab02b786af0a5a1163945targetblank0174f6da"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -472,7 +488,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/mxcai/XMAP-tutorial/tree/f7c4f659a9b7d68a245eccc8ff72e656341263b9" target="_blank">f7c4f65</a>.
+<a href="https://github.com/mxcai/XMAP-tutorial/tree/0174f6d312f46004f9aab02b786af0a5a1163945" target="_blank">0174f6d</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -492,10 +508,12 @@ Ignored files:
     Ignored:    .Rproj.user/
 
 Untracked files:
-    Untracked:  analysis/quick_start.Rmd
+    Untracked:  analysis/LDL.Rmd
+    Untracked:  analysis/confounding.Rmd
 
 Unstaged changes:
-    Modified:   analysis/Vignettes.Rmd
+    Modified:   analysis/_site.yml
+    Modified:   analysis/quick_start.Rmd
 
 </code></pre>
 <p>
@@ -510,16 +528,78 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with
-<code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/quick_start.Rmd</code>) and HTML
+(<code>docs/quick_start.html</code>) files. If you’ve configured a
+remote Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/mxcai/XMAP-tutorial/blob/6eff4653feb6cc186a8340a5496a1ee26932f247/analysis/quick_start.Rmd" target="_blank">6eff465</a>
+</td>
+<td>
+mxcai
+</td>
+<td>
+2024-04-29
+</td>
+<td>
+add toggle
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/mxcai/XMAP-tutorial/6eff4653feb6cc186a8340a5496a1ee26932f247/docs/quick_start.html" target="_blank">6eff465</a>
+</td>
+<td>
+mxcai
+</td>
+<td>
+2024-04-29
+</td>
+<td>
+add toggle
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
 </div>
-<div id="quick-start-with-a-simulated-example" class="section level1">
-<h1>Quick start with a simulated example</h1>
 <p>We start with a simulated data set for demonstrating the usage of
 XMAP software. This data set comprises a locus of 500 SNPs, among which
 3 are causal.</p>
@@ -532,9 +612,46 @@ susie_plot(zs1, &quot;z&quot;, b = Beta_true[, 1], main = &quot;EAS GWAS&quot;,y
 title(ylab=&quot;-log10(p)&quot;,xlab=&quot;variant&quot;,line=2)
 susie_plot(zs2, &quot;z&quot;, b = Beta_true[, 2], main = &quot;EUR GWAS&quot;,ylab=&quot;&quot;,xlab=&quot;&quot;)
 title(ylab=&quot;-log10(p)&quot;,xlab=&quot;variant&quot;,line=2)</code></pre>
-<p><img src="figure/quick_start.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" />
-The above manhattan plots show the p-values of GWASs in EAS and EUR with
-red dots representing the 3 causal SNPs.</p>
+<p><img src="figure/quick_start.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-1">
+Past versions of unnamed-chunk-1-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/mxcai/XMAP-tutorial/blob/6eff4653feb6cc186a8340a5496a1ee26932f247/docs/figure/quick_start.Rmd/unnamed-chunk-1-1.png" target="_blank">6eff465</a>
+</td>
+<td>
+mxcai
+</td>
+<td>
+2024-04-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The above manhattan plots show the p-values of GWASs in EAS and EUR
+with red dots representing the 3 causal SNPs.</p>
 <p>This data set is simulated without confounding bias. For
 demonstration, we apply XMAP by setting <span
 class="math inline">\(c_1=c_2=1\)</span> here.</p>
@@ -555,8 +672,45 @@ cs2 &lt;- get_CS(fit_xmap, Xcorr = R2, coverage = 0.95, min_abs_corr = 0.1)
 cs &lt;- cs1$cs[intersect(names(cs1$cs), names(cs2$cs))]
 pip &lt;- get_pip(fit_xmap$gamma)
 plot_CS(pip, cs, Beta_true[,1], main = &quot;XMAP&quot;)</code></pre>
-<p><img src="figure/quick_start.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" />
-In the above figure, the red dot is the only causal SNP, level-95%
+<p><img src="figure/quick_start.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/mxcai/XMAP-tutorial/blob/6eff4653feb6cc186a8340a5496a1ee26932f247/docs/figure/quick_start.Rmd/unnamed-chunk-3-1.png" target="_blank">6eff465</a>
+</td>
+<td>
+mxcai
+</td>
+<td>
+2024-04-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>In the above figure, the red dot is the only causal SNP, level-95%
 credible sets are colored circles. By combining EAS and EUR GWASs, XMAP
 successfully identifies two true causal signals with high
 confidence.</p>
@@ -599,10 +753,9 @@ loaded via a namespace (and not attached):
 [41] fs_1.5.2           ggplot2_3.3.5      digest_0.6.29      stringi_1.7.8     
 [45] dplyr_1.0.7        rprojroot_2.0.2    grid_4.1.2         cli_3.6.1         
 [49] tools_4.1.2        magrittr_2.0.3     sass_0.4.2         tibble_3.1.6      
-[53] crayon_1.5.1       pkgconfig_2.0.3    ellipsis_0.3.2     Matrix_1.3-4      
-[57] reshape_0.8.8      assertthat_0.2.1   rmarkdown_2.16     rstudioapi_0.13   
-[61] R6_2.5.1           git2r_0.31.0       compiler_4.1.2    </code></pre>
-</div>
+[53] crayon_1.5.1       whisker_0.4        pkgconfig_2.0.3    ellipsis_0.3.2    
+[57] Matrix_1.3-4       reshape_0.8.8      assertthat_0.2.1   rmarkdown_2.16    
+[61] rstudioapi_0.13    R6_2.5.1           git2r_0.31.0       compiler_4.1.2    </code></pre>
 </div>
 
 
