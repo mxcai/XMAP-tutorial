@@ -9,10 +9,12 @@ navbar:
     href: about.html
   - text: Tutorial
     menu:
-    -text: Vignettes
-     href: Vignettes.html
     -text: Quick Start
      href: quick_start.html
+    -text: Vignettes
+     href: Vignettes.html
+  - text: License
+    href: license.html
   right:
   - icon: fab fa-github
     text: Source code
