@@ -1,0 +1,158 @@
+---
+title: "LDL example with 1000 Genomes Reference Panel"
+author: "Mingxuan Cai"
+date: "2024-04-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+We demonstrate how to fit XMAP with reference genotypes from publicly available reference genotypes. For illustration, we consider the LDL GWAS summary statistics from the [full example](https://mxcai.github.io/XMAP-tutorial/LDL.html), while using the 1000 Genomes data to construct EUR and AFR LD matrices. In the following, we introduce how to construct LD matrices from the 1000 Genomes data and fit XMAP with the constructed LD matrices step by step.
+
+## Step 1: Download and preprocess 1000 Genomes genotypes 
+We first obtain GRCH37 1000 Genomes genotype files from [plink](https://www.cog-genomics.org/plink/2.0/resources) and convert them to plink1 format.
+```
+plink2 \\
+  --autosome \\
+  --make-bed \\
+  --max-alleles 2 \\
+  --out all_phase3_noQC \\
+  --pfile all_phase3 \\
+  --rm-dup exclude-all \\
+  --snps-only just-acgt \\
+  --var-filter
+```
+Next, we perform QC, extract EUR and AFR samples, and obtain the genotype files for the target chromosome (chromosome 8 here).
+```
+plink2 \\
+  --bfile all_phase3_noQC \\
+  --chr 8 \\
+  --hwe 1e-10 \\
+  --keep iid_EUR.txt \\
+  --maf 0.005 \\
+  --make-bed \\
+  --out all_phase3_EUR_chr8 \\
+  --var-filter
+  
+plink2 \\
+  --bfile all_phase3_noQC \\
+  --chr 8 \\
+  --hwe 1e-10 \\
+  --keep iid_AFR.txt \\
+  --maf 0.005 \\
+  --make-bed \\
+  --out all_phase3_AFR_chr8 \\
+  --var-filter
+```
+
+
+## Step 2: Construct LD matrices for EUR and AFR in the target region
+Once the plink files are ready, we can read summary statistics and extract SNPs from the summary data and reference genotype in the target region. Here, we focus on 20000001-23000001 in chromosome 8, which is present in our manuscript.
+```{r ,eval=F}
+library(XMAP)
+library(susieR)
+library(data.table)
+library(Matrix)
+library(snpStats)
+
+# read sumstats
+sumstat_EUR <- fread("/Users/cmx/Documents/Research/Project/Fine_Mapping/sumstats/LDL_allSNPs_UKBNealLab_summary_format.txt")
+sumstat_AFR <- fread("/Users/cmx/Documents/Research/Project/Fine_Mapping/sumstats/LDL_AFR_GLGC_summary_format.txt")
+
+# read genotype information
+bim_EUR <- fread("/Users/cmx/Documents/Research/Data/GWAS/Genotype/all_phase3_EUR_chr8.bim")
+bim_AFR <- fread("/Users/cmx/Documents/Research/Data/GWAS/Genotype/all_phase3_AFR_chr8.bim")
+
+# detect allele ambiguous SNPs
+idx_amb_EUR <- (bim_EUR$V5 == comple(bim_EUR$V6))
+idx_amb_AFR <- (bim_AFR$V5 == comple(bim_AFR$V6))
+
+# identify overlapping SNPs on region chr8_20000001_23000001
+snps <- Reduce(intersect, list(bim_AFR$V2[!idx_amb_AFR & bim_AFR$V4 > 20000001 & bim_AFR$V4 < 23000001], bim_EUR$V2[!idx_amb_EUR], sumstat_AFR$SNP, sumstat_EUR$SNP))
+
+# read genotype matrices
+geno_EUR <- read.plink("/Users/cmx/Documents/Research/Data/GWAS/Genotype/all_phase3_EUR_chr8.bed")
+X_EUR <- as(geno_EUR$genotypes, "numeric")
+X_EUR_i <- X_EUR[,match(snps, bim_EUR$V2)]
+
+geno_AFR <- read.plink("/Users/cmx/Documents/Research/Data/GWAS/Genotype/all_phase3_AFR_chr8.bed")
+X_AFR <- as(geno_AFR$genotypes, "numeric")
+X_AFR_i <- X_AFR[,match(snps, bim_AFR$V2)]
+
+bim_EUR_i <- bim_EUR[match(snps, bim_EUR$V2), ]
+bim_AFR_i <- bim_AFR[match(snps, bim_AFR$V2), ]
+
+# align genotype alleles using EUR as reference
+idx_flip <- which(bim_AFR_i$V5!=bim_EUR_i$V5 & bim_AFR_i$V5!=comple(bim_EUR_i$V5))
+# flip allels in AFR genotypes
+X_AFR_i[,idx_flip] <- 2 - X_AFR_i[,idx_flip]
+
+# compute LD matrices
+R_EUR <- cor(X_EUR_i)
+R_AFR <- cor(X_AFR_i)
+```
+The `R_EUR` and `R_AFR` constructed above will be used for fitting XMAP in the subsequent analysis. We also extract SNPs from summary data for the target region and flip alleles in the summary data to match the reference genotype.
+
+```{r ,eval=F}
+# extract target region snps from sumstats data
+sumstat_AFR_i <- sumstat_AFR[match(snps, sumstat_AFR$SNP), ]
+sumstat_EUR_i <- sumstat_EUR[match(snps, sumstat_EUR$SNP), ]
+
+# flip alleles in sumstats
+z_afr <- sumstat_AFR_i$beta / sumstat_AFR_i$se
+z_eur <- sumstat_EUR_i$Z
+
+idx_flip <- which(sumstat_AFR_i$A1 != bim_EUR_i$V5 & sumstat_AFR_i$A1 != comple(bim_EUR_i$V5))
+z_afr[idx_flip] <- -z_afr[idx_flip]
+
+idx_flip <- which(sumstat_EUR_i$A1 != bim_EUR_i$V5 & sumstat_EUR_i$A1 != comple(bim_EUR_i$V5))
+z_eur[idx_flip] <- -z_eur[idx_flip]
+```
+
+## Step 3: Fit XMAP with the constructed LD matrices
+With the LD matrices `R_EUR` and `R_AFR`, and the summary statistics `z_eur` and `z_afr`, we can fit XMAP to obtain the causal SNPs and credible sets. Here, we set the number of causal SNPs to 10. We set the `C1` and `C2` values to the estimated LDSC intercepts. Details can be found at [the step 1 in the full example](https://mxcai.github.io/XMAP-tutorial/LDL.html).
+
+```{r ,eval=F}
+# LDSC intercepts
+c1 <- 1.066501
+c2 <- 1.095526
+
+# fit XMAP
+xmap <- XMAP(simplify2array(list(R_EUR, R_AFR)), cbind(z_eur, z_afr), n=c(median(sumstat_EUR_i$N), median(sumstat_AFR_i$N)),
+             K = 10, Omega = OmegaHat, Sig_E = c(c1, c2), tol = 1e-6,
+             maxIter = 200, estimate_residual_variance = F, estimate_prior_variance = T,
+             estimate_background_variance = F)
+cs1 <- get_CS(xmap, Xcorr = R_AFR, coverage = 0.9, min_abs_corr = 0.1)
+cs2 <- get_CS(xmap, Xcorr = R_EUR, coverage = 0.9, min_abs_corr = 0.1)
+cs_xmap <- cs1$cs[intersect(names(cs1$cs), names(cs2$cs))]
+pip_xmap <- get_pip(xmap$gamma)
+plot_CS(pip_xmap, cs_xmap, main = "XMAP",b = (bim_EUR_i$V2 == "rs900776"))
+```
+```{r, echo=F}
+library(XMAP)
+library(susieR)
+load("data/xmap_susie_LDL_TGP.RData")
+plot_CS(pip_xmap, cs_xmap, main = "XMAP",b = (bim_EUR_i$V2 == "rs900776"))
+```
+For comparison, we also fit SuSiE with AFR and EUR data separately and plot the credible sets.
+```{r ,eval=F}
+susie_EUR <- susie_rss(z=z_eur,R=R_EUR,n=median(sumstat_EUR_i$N))
+susie_plot(susie_EUR,y="PIP",b = (bim_EUR_i$V2 == "rs900776"))
+
+susie_AFR <- susie_rss(z=z_afr,R=R_AFR,n=median(sumstat_AFR_i$N))
+susie_plot(susie_AFR,y="PIP",b = (bim_EUR_i$V2 == "rs900776"))
+```
+
+```{r, echo=F}
+susie_plot(susie_EUR,y="PIP",b = (bim_EUR_i$V2 == "rs900776"),main="SuSiE-EUR")
+susie_plot(susie_AFR,y="PIP",b = (bim_EUR_i$V2 == "rs900776"),main="SuSiE-AFR")
+```
+
+## Caution on out-sample LD reference
+In this example, we used publicly available data from 1000 Genomes Project to construct the LD matrices for EUR and AFR populations. However, the LD matrices constructed from the reference data may produce unreliable results in fine-mapping. __In practice, we recommend using the in-sample genotype data to construct the LD matrices for the target population. One can follow the above steps to construct their own LD matrices and fit XMAP with the in-sample genotype data.__ 
+
+
+
+

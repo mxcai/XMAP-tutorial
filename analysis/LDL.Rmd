@@ -8,11 +8,15 @@ editor_options:
 ---
  
 
-In this example, we show the complete pipeline of using XMAP to identify causal SNPs by using real GWAS data. As an example, we use LDL GWASs from AFR and EUR. The files involved are:
+In this example, we show the complete pipeline of using XMAP to identify causal SNPs by using real GWAS data. As an example, we use LDL GWASs from AFR and EUR. 
 
+## Step 0: Data preparation
 1. GWAS summary statistics from different populations
 2. LD scores estimated with samples from the analyzed populations
 3. LD matrices of the target locus estimated with samples from the analyzed populations
+
+The GWAS summary statistics are available at [Neal Lab](https://www.nealelab.is/uk-biobank) or [GLGC](https://csg.sph.umich.edu/abecasis/public/lipids2013/). Here, we use LD matrices contructed from UK Biobank genotypes as it is the in-sample genotype data for the EUR summary statistics and has a large sample size. The EUR LD matrices resources are available at [Prof Alkes Price's group](https://alkesgroup.broadinstitute.org/UKBB_LD/) or AWS site: s3://broad-alkesgroup-ukbb-ld/UKBB_LD/. We constrcutes the AFR LD matrices from the UK Biobank genotypes by ourselves. If you wish to construct LD matrices from your own plink files or public dataset (e.g., 1000 Genomes), please refer to [the example with 1000 Genomes Reference Panel](https://mxcai.github.io/XMAP-tutorial/LDL_TGP.html).
+
 
 The XMAP analysis involves two steps. We first estimate the polygenic parameters and inflation constants using GWAS summary data from the whole genome. Then we fix these parameters and use variational inference to evaluate the posteriror inclusion probability of SNPs in the target locus.
 In this example, we focus on the SNP rs900776 that was previously reported to be related with LDL. This SNP is located at the locus defined by base pair 20000001-23000001 in Chromosome 8. We provide the AFR and EUR LD matrices of this locus estimated from UK Biobank genotypes with the link given in the XMAP GitHub page.

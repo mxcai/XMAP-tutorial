@@ -13,8 +13,10 @@ navbar:
       href: quick_start.html
     - text: Simulated example with confounding effects
       href: confounding.html
-    - text: Real data example with LDL GWAS
+    - text: Real data example with LDL GWAS and UK Biobank reference genotypes
       href: LDL.html
+    - text: Real data example with LDL GWAS and 1000 Genomes reference genotypes
+      href: LDL_TGP.html
   - text: License
     href: license.html
   right:
