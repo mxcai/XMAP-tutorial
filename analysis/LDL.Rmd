@@ -11,6 +11,7 @@ editor_options:
 In this example, we show the complete pipeline of using XMAP to identify causal SNPs by using real GWAS data. As an example, we use LDL GWASs from AFR and EUR. 
 
 ## Step 0: Data preparation
+XMAP requires three types of data as input:
 1. GWAS summary statistics from different populations
 2. LD scores estimated with samples from the analyzed populations
 3. LD matrices of the target locus estimated with samples from the analyzed populations

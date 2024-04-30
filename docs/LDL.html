@@ -472,15 +472,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommxcaiXMAPtutorialtree36aec6276bc48c656316eebb907c347f44473aa5targetblank36aec62a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommxcaiXMAPtutorialtree243ff3bee21fb310dd41b1e61d1677defd470577targetblank243ff3ba">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/mxcai/XMAP-tutorial/tree/36aec6276bc48c656316eebb907c347f44473aa5" target="_blank">36aec62</a>
+<a href="https://github.com/mxcai/XMAP-tutorial/tree/243ff3bee21fb310dd41b1e61d1677defd470577" target="_blank">243ff3b</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcommxcaiXMAPtutorialtree36aec6276bc48c656316eebb907c347f44473aa5targetblank36aec62a"
+id="strongRepositoryversionstrongahrefhttpsgithubcommxcaiXMAPtutorialtree243ff3bee21fb310dd41b1e61d1677defd470577targetblank243ff3ba"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -490,7 +490,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/mxcai/XMAP-tutorial/tree/36aec6276bc48c656316eebb907c347f44473aa5" target="_blank">36aec62</a>.
+<a href="https://github.com/mxcai/XMAP-tutorial/tree/243ff3bee21fb310dd41b1e61d1677defd470577" target="_blank">243ff3b</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -510,13 +510,8 @@ Ignored files:
     Ignored:    .Rproj.user/
     Ignored:    data/.DS_Store
 
-Untracked files:
-    Untracked:  analysis/LDL_TGP.Rmd
-    Untracked:  data/xmap_susie_LDL_TGP.RData
-
 Unstaged changes:
     Modified:   analysis/LDL.Rmd
-    Modified:   analysis/_site.yml
 
 </code></pre>
 <p>
@@ -561,6 +556,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/mxcai/XMAP-tutorial/blob/243ff3bee21fb310dd41b1e61d1677defd470577/analysis/LDL.Rmd" target="_blank">243ff3b</a>
+</td>
+<td>
+mxcai
+</td>
+<td>
+2024-04-30
+</td>
+<td>
+add LD construction
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/mxcai/XMAP-tutorial/243ff3bee21fb310dd41b1e61d1677defd470577/docs/LDL.html" target="_blank">243ff3b</a>
+</td>
+<td>
+mxcai
+</td>
+<td>
+2024-04-30
+</td>
+<td>
+add LD construction
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -624,12 +653,10 @@ identify causal SNPs by using real GWAS data. As an example, we use LDL
 GWASs from AFR and EUR.</p>
 <div id="step-0-data-preparation" class="section level2">
 <h2>Step 0: Data preparation</h2>
-<ol style="list-style-type: decimal">
-<li>GWAS summary statistics from different populations</li>
-<li>LD scores estimated with samples from the analyzed populations</li>
-<li>LD matrices of the target locus estimated with samples from the
-analyzed populations</li>
-</ol>
+<p>XMAP requires three types of data as input: 1. GWAS summary
+statistics from different populations 2. LD scores estimated with
+samples from the analyzed populations 3. LD matrices of the target locus
+estimated with samples from the analyzed populations</p>
 <p>The GWAS summary statistics are available at <a
 href="https://www.nealelab.is/uk-biobank">Neal Lab</a> or <a
 href="https://csg.sph.umich.edu/abecasis/public/lipids2013/">GLGC</a>.
